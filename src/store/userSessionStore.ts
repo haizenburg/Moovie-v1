@@ -23,7 +23,9 @@ const useUserSessionStore = create<any>(
   persist(
     (set) => ({
       user: null, // Default state
+      interests: [],
       setUserData: (user: User) => set({ user }),
+      setUserInterests: (interests: string[]) => set({ interests }),
       clearUserData: () => set({ user: null })
     }),
     {

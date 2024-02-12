@@ -19,9 +19,14 @@ export default function Login() {
         .required("Required")
     }),
     onSubmit: async (values) => {
-      // Implement registration logic here
-      //   console.log(values);
-      await login(values.email, values.password).then(() => router("/"));
+      // const { error } =
+      // console.log("Logged in"); // Log on successful login
+      try {
+        await login(values.email, values.password);
+        router("/");
+      } catch (error) {
+        console.error("Login failed:", error); // Log if there was an error during login
+      }
     }
   });
   return (
