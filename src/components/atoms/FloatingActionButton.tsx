@@ -1,4 +1,5 @@
-export const FloatingActionButton = ({ onClick }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const FloatingActionButton = ({ onClick }: any) => {
   return (
     <button
       onClick={onClick}

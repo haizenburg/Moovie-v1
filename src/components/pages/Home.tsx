@@ -1,12 +1,10 @@
-import { FloatingActionButton } from "components/atoms/FloatingActionButton";
 import MovieCard from "components/atoms/MovieCard";
-import { TodoForm } from "components/atoms/TodoForm";
 import { fetchPopularMovies, fetchMovieGenres } from "hooks/home/movies";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Genre, Movie } from "src/interface";
 
 export default function Home() {
-  const [formVisible, setFormVisible] = useState(false);
+  // const [formVisible, setFormVisible] = useState(false);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -25,8 +23,8 @@ export default function Home() {
 
         // Organize movies by genres
         const moviesGenreMap: { [key: string]: Movie[] } = {};
-        fetchedGenres.forEach((genre) => {
-          const filteredMovies = fetchedMovies.filter((movie) =>
+        fetchedGenres.forEach((genre: Genre) => {
+          const filteredMovies = fetchedMovies.filter((movie: Movie) =>
             movie.genre_ids.includes(genre.id)
           );
           if (filteredMovies.length > 0) {
@@ -79,12 +77,12 @@ export default function Home() {
     setMoviesByGenre(moviesGenreMap);
   }, [filteredMovies, genres]);
 
-  const handleAddTodo = async ({ task, selectedMovie, dueDate }) => {
-    // Here you would add the logic to insert the new to-do item into the database
-    // console.log("adding thee movie bro", task, selectedMovie, dueDate);
-    // Close the form after submission
-    setFormVisible(false);
-  };
+  // const handleAddTodo = async ({ task, selectedMovie, dueDate }) => {
+  //   // Here you would add the logic to insert the new to-do item into the database
+  //   // console.log("adding thee movie bro", task, selectedMovie, dueDate);
+  //   // Close the form after submission
+  //   setFormVisible(false);
+  // };
 
   return (
     <div className="bg-black text-white">

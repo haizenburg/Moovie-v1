@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -8,22 +9,17 @@ interface User {
   hasCompletedOnboarding: boolean;
 }
 
-interface UserSessionState {
-  user: User | null;
-  interests: string[]; // Array to store user interests
-  setUserData: (user: User) => void;
-  setUserInterests: (interests: string[]) => void; // Function to update interests
-  clearUserData: () => void;
-}
-
-// interface UserSessionActions {
+// interface UserSessionState {
+//   user: User | null;
+//   interests: string[]; // Array to store user interests
 //   setUserData: (user: User) => void;
+//   setUserInterests: (interests: string[]) => void; // Function to update interests
 //   clearUserData: () => void;
 // }
 
-type UserSessionStore = UserSessionState;
+// type UserSessionStore = UserSessionState;
 
-const useUserSessionStore = create<UserSessionStore>(
+const useUserSessionStore = create<any>(
   persist(
     (set) => ({
       user: null, // Default state

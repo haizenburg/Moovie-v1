@@ -24,7 +24,7 @@ export default function Register() {
       // Implement registration logic here
       console.log(values);
       await register(values.email, values.password, values.username).then(() =>
-        router("/onboarding")
+        router("/")
       );
     }
   });
