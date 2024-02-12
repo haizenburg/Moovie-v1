@@ -5,7 +5,7 @@ import useUserSessionStore from "../../store/userSessionStore";
 
 function useRegister() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
 
   const register = async (
     email: string,
@@ -65,7 +65,7 @@ function useRegister() {
 
 function useLogin() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
 
   const login = async (email: string, password: string) => {
     setLoading(true);

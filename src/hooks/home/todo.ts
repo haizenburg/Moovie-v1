@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import supabase from "../supabaseClient";
 
@@ -5,7 +6,7 @@ const useAddTodo = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const addTodo = async ({ userId, task, selectedMovie, dueDate }) => {
+  const addTodo = async ({ userId, task, selectedMovie, dueDate }: any) => {
     setLoading(true);
 
     try {
@@ -22,7 +23,7 @@ const useAddTodo = () => {
 
       setLoading(false);
       return data;
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message);
       setLoading(false);
       return null;
@@ -49,8 +50,9 @@ const useFetchTodos = (userId: any) => {
           .eq("user_id", userId);
 
         if (error) throw error;
-        console.log("data", data);
-        setTodos(data);
+
+        const todoData: any = data;
+        setTodos(todoData);
       } catch (err: any) {
         setError(err.message);
       } finally {

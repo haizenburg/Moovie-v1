@@ -1,23 +1,24 @@
-import React, { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from "react";
 import useUserSessionStore from "../../store/userSessionStore";
 import { useFetchTodos } from "../../hooks/home/todo";
-import { Todo } from "../../interface";
+import { Movie, Todo } from "../../interface";
 import { useAddTodo } from "../../hooks/home/todo";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Modal from "./Modal";
 
-export const TodoForm = ({ isVisible, onSubmit, movies }) => {
+export const TodoForm = ({ isVisible, onSubmit, movies }: any) => {
   const [showModal, setShowModal] = useState(false);
   const { user } = useUserSessionStore();
   const { todos, loading } = useFetchTodos(user?.id);
   const [selectedMovie, setSelectedMovie] = useState("");
   const [task, setTask] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const { addTodo, loading: addLoading, error } = useAddTodo();
+  const { addTodo } = useAddTodo();
 
   if (!isVisible) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log("adding thee movie bro", task, selectedMovie, dueDate);
     onSubmit(task, selectedMovie, dueDate);
@@ -96,9 +97,9 @@ export const TodoForm = ({ isVisible, onSubmit, movies }) => {
               required
             >
               <option value="">Select a movie</option>
-              {movies.map((movie) => (
-                <option key={movie.imdbID} value={movie.Title}>
-                  {movie.Title}
+              {movies.map((movie: Movie, index: number) => (
+                <option key={index} value={movie.title}>
+                  {movie.title}
                 </option>
               ))}
             </select>
