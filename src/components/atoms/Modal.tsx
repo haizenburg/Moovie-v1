@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const Modal = ({ isOpen, onClose, children }: any) => {
   if (!isOpen) return null;
 

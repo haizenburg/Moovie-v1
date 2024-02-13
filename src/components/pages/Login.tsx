@@ -1,5 +1,6 @@
 import { useLogin } from "../../hooks/auth";
 import { useFormik } from "formik";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
@@ -19,19 +20,17 @@ export default function Login() {
         .required("Required")
     }),
     onSubmit: async (values) => {
-      // const { error } =
-      // console.log("Logged in"); // Log on successful login
       try {
         await login(values.email, values.password);
         router("/");
       } catch (error) {
-        console.error("Login failed:", error); // Log if there was an error during login
+        console.error("Login failed:", error);
       }
     }
   });
   return (
-    <>
-      <div className="flex min-h-full flex-1">
+    <div className="h-screen">
+      <div className="flex h-screen flex-1">
         <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6  lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
@@ -127,15 +126,21 @@ export default function Login() {
                   <div>
                     <button
                       type="submit"
-                      className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      className="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
                       Sign in
                     </button>
                   </div>
+
+                  <div className="text-sm leading-6">
+                    <Link to="/register" className="font-semibold text-primary">
+                      Create an account
+                    </Link>
+                  </div>
                 </form>
               </div>
 
-              <div className="mt-10">
+              {/* <div className="mt-10">
                 <div className="relative">
                   <div
                     className="absolute inset-0 flex items-center"
@@ -203,7 +208,7 @@ export default function Login() {
                     </span>
                   </a>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -215,6 +220,6 @@ export default function Login() {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }
