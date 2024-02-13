@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import axios from "axios";
 import MovieCard from "components/atoms/MovieCard";
 import { fetchPopularMovies, fetchMovieGenres } from "hooks/home/movies";
 import { useEffect, useState } from "react";
 import { Genre, Movie } from "src/interface";
 
 export default function Home() {
-  // const [formVisible, setFormVisible] = useState(false);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -12,6 +13,18 @@ export default function Home() {
     [key: string]: Movie[];
   }>({});
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+
+  const fetchMoviesWithSearchTerm = async (search: string) => {
+    try {
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/search/movie?api_key=d01c06772075d10d7c4dd5c7d2db6cfd&query=${search}`
+      );
+      console.log("Fetched movies with search term:", response.data.results);
+      setFilteredMovies(response.data.results);
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+    }
+  };
 
   useEffect(() => {
     const initFetch = async () => {
@@ -43,9 +56,9 @@ export default function Home() {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetchPopularMovies(); // Assuming fetchRandomMovies is available
+        const response = await fetchPopularMovies();
         setMovies(response);
-        console.log("Fetched movies:", response);
+        console.log("Fetched movies:", response, genres);
       } catch (error) {
         console.error("Error fetching movies:", error);
       }
@@ -54,35 +67,13 @@ export default function Home() {
     fetchMovies();
   }, []);
 
-  useEffect(() => {
-    const lowercasedSearchTerm = searchTerm.toLowerCase();
-    const filtered = movies.filter((movie) =>
-      movie.title.toLowerCase().includes(lowercasedSearchTerm)
-    );
-    setFilteredMovies(filtered);
-  }, [searchTerm, movies]);
-
-  // // Update your movies by genre to use the filteredMovies
-  useEffect(() => {
-    const moviesGenreMap: { [key: string]: Movie[] } = {};
-    genres.forEach((genre) => {
-      // Use a different variable name for the filtered movies inside the loop to avoid naming conflict
-      const moviesInGenre = filteredMovies.filter((movie) =>
-        movie.genre_ids.includes(genre.id)
-      );
-      if (moviesInGenre.length > 0) {
-        moviesGenreMap[genre.name] = moviesInGenre;
-      }
-    });
-    setMoviesByGenre(moviesGenreMap);
-  }, [filteredMovies, genres]);
-
-  // const handleAddTodo = async ({ task, selectedMovie, dueDate }) => {
-  //   // Here you would add the logic to insert the new to-do item into the database
-  //   // console.log("adding thee movie bro", task, selectedMovie, dueDate);
-  //   // Close the form after submission
-  //   setFormVisible(false);
-  // };
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      fetchMoviesWithSearchTerm(searchTerm);
+    } else {
+      fetchPopularMovies();
+    }
+  };
 
   return (
     <div className="bg-black text-white">
@@ -106,31 +97,44 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="p-10">
+      <div className="p-10 flex gap-5">
         <input
           type="text"
           placeholder="Search movies..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-2 rounded-md text-black"
+          className="w-full p-3 rounded-xl text-black"
         />
+
+        <button onClick={handleSearch} className=" bg-primary p-2 rounded-xl">
+          Search
+        </button>
       </div>
 
-      {/* Categories Section */}
-      <div className="space-y-8">
-        {Object.entries(moviesByGenre).map(([genreName, moviesInGenre]) => (
-          <div key={genreName} className="mb-8">
-            <h2 className="text-xl font-bold mb-4 px-10">{genreName}</h2>
-            <div className="flex overflow-y-scroll space-x-4 px-10">
-              {moviesInGenre.map((movie) => (
-                <div key={movie.id}>
-                  <MovieCard movie={movie} />
-                </div>
-              ))}
+      {filteredMovies.length === 0 ? (
+        <div className="space-y-8">
+          {Object.entries(moviesByGenre).map(([genreName, moviesInGenre]) => (
+            <div key={genreName} className="mb-8">
+              <h2 className="text-xl font-bold mb-4 px-10">{genreName}</h2>
+              <div className="flex overflow-y-scroll space-x-4 px-10">
+                {moviesInGenre.map((movie) => (
+                  <div key={movie.id}>
+                    <MovieCard movie={movie} />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 px-10 py-4">
+          {filteredMovies.map((movie) => (
+            <div key={movie.id} className="flex flex-col">
+              <MovieCard movie={movie} />
+            </div>
+          ))}
+        </div>
+      )}
       {/* Floating Action Button for ToDo list here
       {formVisible && (
         <TodoForm
